@@ -1,12 +1,11 @@
 package service
 
 import (
+	"Market/auth-service/config"
 	"time"
 
 	"github.com/golang-jwt/jwt"
 )
-
-var jwtKey = []byte("secret")
 
 func GenerateJWT(email string) (string, error) {
 	claims := &jwt.StandardClaims{
@@ -15,5 +14,5 @@ func GenerateJWT(email string) (string, error) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(jwtKey)
+	return token.SignedString(config.JWTKey)
 }
