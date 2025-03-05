@@ -1,4 +1,4 @@
-module Market/auth-service
+module market/auth-service
 
 go 1.23.6
 

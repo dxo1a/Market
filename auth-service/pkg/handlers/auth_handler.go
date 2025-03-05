@@ -3,9 +3,9 @@ package handlers
 import (
 	"context"
 
-	"Market/auth-service/internal/repository"
-	"Market/auth-service/internal/service"
-	pb "Market/auth-service/proto"
+	"market/auth-service/pkg/service"
+	"market/auth-service/pkg/repository"
+	pb "market/auth-service/proto"
 
 	"golang.org/x/crypto/bcrypt"
 	"google.golang.org/grpc"

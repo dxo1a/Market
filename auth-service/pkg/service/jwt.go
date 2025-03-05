@@ -1,7 +1,7 @@
 package service
 
 import (
-	"Market/auth-service/config"
+	"market/auth-service/config"
 	"time"
 
 	"github.com/golang-jwt/jwt"

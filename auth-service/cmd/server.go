@@ -5,10 +5,10 @@ import (
 	"log"
 	"net"
 
-	"Market/auth-service/config"
-	"Market/auth-service/internal/handlers"
-	"Market/auth-service/internal/repository"
-	pb "Market/auth-service/proto"
+	"market/auth-service/config"
+	"market/auth-service/pkg/handlers"
+	"market/auth-service/pkg/repository"
+	pb "market/auth-service/proto"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
