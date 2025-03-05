@@ -1,0 +1,58 @@
+services:
+  auth-service:
+    build: ./auth-service
+    env_file:
+      - .env
+    container_name: auth-service
+    ports:
+      - "50051:50051"
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - JWT_SECRET=${JWT_SECRET}
+    networks:
+      - app-network
+    volumes:
+      - ./auth-service:/app
+      - ./.env:/app/.env
+    develop:
+      watch:
+        - path: ./auth-service/
+          action: rebuild
+    
+  envoy:
+    build: ./envoy
+    container_name: envoy
+    ports:
+      - "8080:8080"
+    depends_on:
+      - auth-service
+    networks:
+      - app-network
+    develop:
+      watch:
+        - path: ./envoy/
+          action: rebuild
+
+  frontend:
+    build: ./market-client
+    container_name: vue-frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./market-client:/app
+      - /app/node_modules
+    command: ["npm", "run", "dev", "--", "--host"]
+    depends_on:
+      - envoy
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+
+    
