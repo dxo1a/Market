@@ -1,0 +1,16 @@
+{
+    "eslint.workingDirectories": 
+    // [
+    //     { 
+    //         "mode": "auto"
+    //     }
+    // ]
+    [   
+        "./market-client/",
+        // { "directory": "./market-client/", "changeProcessCWD": true,  }, 
+    ], 
+    "editor.formatOnSave": true, 
+    "editor.defaultFormatter": "esbenp.prettier-vscode", 
+    "prettier.requireConfig": true ,
+    // "eslint.nodePath": null
+}
