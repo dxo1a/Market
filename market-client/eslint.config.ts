@@ -21,4 +21,47 @@ export default defineConfigWithVueTs(
   pluginVue.configs['flat/essential'],
   vueTsConfigs.recommended,
   skipFormatting,
+
+  {
+    rules: {
+      '@typescript-eslint/ban-ts-comment': 'warn',
+      '@typescript-eslint/no-unused-vars': ['error'],
+      'no-console': ['error', { allow: ['warn', 'error'] }],
+      'vue/multi-word-component-names' : 'off',
+
+      'vue/attributes-order': [
+        'error',
+        {
+          order: [
+            'DEFINITION',
+            'LIST_RENDERING',
+            'CONDITIONALS',
+            'RENDER_MODIFIERS',
+            'GLOBAL',
+            ['UNIQUE', 'SLOT'],
+            'TWO_WAY_BINDING',
+            'OTHER_DIRECTIVES',
+            'OTHER_ATTR',
+            'EVENTS',
+            'CONTENT',
+          ],
+          alphabetical: false,
+        },
+      ],
+      'no-irregular-whitespace': ['off'],
+      'vue/no-v-html': ['warn'],
+      'vue/html-self-closing': [
+        'error',
+        {
+          html: {
+            void: 'any',
+            normal: 'always',
+            component: 'always',
+          },
+          svg: 'always',
+          math: 'always',
+        },
+      ],
+    }
+  }
 )
