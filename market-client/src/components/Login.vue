@@ -1,3 +1,22 @@
+<script lang="ts" setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { loginUser } from '@/utils/auth-client';
+
+const emailOrUsername = ref('');
+const password = ref('');
+const router = useRouter();
+
+const handleLogin = async () => {
+  const token = await loginUser(emailOrUsername.value, '', password.value);
+  if (token) {
+    localStorage.setItem('authToken', token);
+    router.push({ name: 'home' });
+  } else {
+    console.error('Login failed!');
+  }
+};
+</script>
 <template>
   <div class="form-container">
     <div class="back-button-container">
@@ -14,37 +33,6 @@
     </form>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { loginUser } from '@/main';
-
-export default defineComponent({
-  name: 'Login',
-  setup() {
-    const emailOrUsername = ref('');
-    const password = ref('');
-    const router = useRouter();
-
-    const handleLogin = async () => {
-      const token = await loginUser(emailOrUsername.value, '', password.value);
-      if (token) {
-        localStorage.setItem('authToken', token);
-        router.push({ name: 'home' });
-      } else {
-        console.error('Login failed!');
-      }
-    };
-
-    return {
-      emailOrUsername,
-      password,
-      handleLogin,
-    };
-  },
-});
-</script>
 
 <style scoped>
 .form-container {

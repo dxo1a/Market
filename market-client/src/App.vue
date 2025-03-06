@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
+
 </script>
 
 <template>
-  <div id="app">
+  <div>
     <div class="main-container">
       <RouterView />
     </div>
@@ -32,7 +33,8 @@ body {
 
 .main-container {
   width: 100%;
-  max-width: 250px; /* Максимальная ширина контейнера */
+  max-width: 250px;
+  /* Максимальная ширина контейнера */
   padding: 20px;
   background-color: #fff;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);

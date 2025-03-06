@@ -1,3 +1,30 @@
+<script lang="ts" setup>
+import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { registerUser } from '@/utils/auth-client';
+
+const email = ref('');
+const username = ref('');
+const password = ref('');
+const confirmPassword = ref('');
+const router = useRouter();
+
+const passwordsMatch = computed(() => password.value === confirmPassword.value);
+const isFormValid = computed(() => email.value && username.value.length >= 5 && password.value && passwordsMatch.value);
+
+const handleRegister = async () => {
+  if (isFormValid.value) {
+    const token = await registerUser(email.value, username.value, password.value);
+    if (token) {
+      localStorage.setItem('authToken', token);
+      router.push({ name: 'home' });
+    }
+  } else {
+    console.error('Form is invalid!');
+  }
+};
+
+</script>
 <template>
   <div class="form-container">
     <div class="back-button-container">
@@ -16,48 +43,6 @@
     </form>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent, ref, computed } from 'vue';
-import { useRouter } from 'vue-router';
-import { registerUser } from '@/main';
-
-export default defineComponent({
-  name: 'Register',
-  setup() {
-    const email = ref('');
-    const username = ref('');
-    const password = ref('');
-    const confirmPassword = ref('');
-    const router = useRouter();
-
-    const passwordsMatch = computed(() => password.value === confirmPassword.value);
-    const isFormValid = computed(() => email.value && username.value.length >= 5 && password.value && passwordsMatch.value);
-
-    const handleRegister = async () => {
-      if (isFormValid.value) {
-        const token = await registerUser(email.value, username.value, password.value);
-        if (token) {
-          localStorage.setItem('authToken', token);
-          router.push({ name: 'home' });
-        }
-      } else {
-        console.error('Form is invalid!');
-      }
-    };
-
-    return {
-      email,
-      username,
-      password,
-      confirmPassword,
-      isFormValid,
-      handleRegister,
-    };
-  },
-});
-</script>
-
 <style scoped>
 .form-container {
   text-align: center;

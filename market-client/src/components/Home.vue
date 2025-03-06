@@ -1,3 +1,39 @@
+<script lang="ts" setup>
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { logoutUser } from '@/utils/auth-client'
+
+const userName = ref('')
+
+const router = useRouter()
+onMounted(() => {
+  const token = localStorage.getItem('authToken')
+  if (token) {
+    const decodedToken = decodeToken(token)
+    userName.value = decodedToken.sub
+  }
+})
+
+function decodeToken(token: string) {
+  const tokenParts = token.split('.')
+  if (tokenParts.length === 3) {
+    const base64Url = tokenParts[1]
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
+    const decodedPayload = atob(base64)
+    return JSON.parse(decodedPayload)
+  }
+  return {}
+}
+const handleLogout = async () => {
+  const token = localStorage.getItem('authToken')
+  if (token) {
+    await logoutUser(token)
+    localStorage.removeItem('authToken')
+    userName.value = ''
+    router.push({ name: 'home' })
+  }
+}
+</script>
 <template>
   <div class="form-container">
     <p v-if="userName">Асалам алейкум, {{ userName }}!</p>
@@ -13,54 +49,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { logoutUser } from '@/main';
-
-export default defineComponent({
-  name: 'Home',
-  setup() {
-    const userName = ref('');
-    const router = useRouter();
-
-    onMounted(() => {
-      const token = localStorage.getItem('authToken');
-      if (token) {
-        const decodedToken = decodeToken(token);
-        userName.value = decodedToken.sub;
-      }
-    });
-
-    function decodeToken(token: string) {
-      const tokenParts = token.split('.');
-      if (tokenParts.length === 3) {
-        const base64Url = tokenParts[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const decodedPayload = atob(base64);
-        return JSON.parse(decodedPayload);
-      }
-      return {};
-    }
-
-    const handleLogout = async () => {
-      const token = localStorage.getItem('authToken');
-      if (token) {
-        await logoutUser(token);
-        localStorage.removeItem('authToken');
-        userName.value = '';
-        router.push({ name: 'home' });
-      }
-    };
-
-    return {
-      userName,
-      handleLogout,
-    };
-  },
-});
-</script>
 
 <style scoped>
 .form-container {
@@ -85,7 +73,7 @@ input {
 button {
   margin: 0 10px 0 10px;
   padding: 10px 20px;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   border: none;
   border-radius: 4px;
