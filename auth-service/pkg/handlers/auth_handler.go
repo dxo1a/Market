@@ -46,20 +46,14 @@ func (h *AuthHandler) Login(ctx context.Context, req *pb.LoginRequest) (*pb.Logi
 	var user *repository.User
 	var err error
 
-	// Пытаемся найти пользователя по email или username
-	if req.Email != "" || req.Username != "" {
-		emailOrUsername := req.Email
-		if emailOrUsername == "" {
-			emailOrUsername = req.Username
-		}
-
-		// Получаем пользователя по email или username
-		user, err = repository.GetUserByEmailOrUsername(h.DB, emailOrUsername)
-		if err != nil {
-			return nil, status.Errorf(codes.NotFound, "пользователь не найден")
-		}
-	} else {
+	if req.EmailOrUsername == "" {
 		return nil, status.Errorf(codes.InvalidArgument, "требуется email или username")
+	}
+
+	// получаем пользователя по email или username
+	user, err = repository.GetUserByEmailOrUsername(h.DB, req.EmailOrUsername)
+	if err != nil {
+		return nil, status.Errorf(codes.NotFound, "пользователь не найден")
 	}
 
 	// Проверка пароля
@@ -76,7 +70,7 @@ func (h *AuthHandler) Login(ctx context.Context, req *pb.LoginRequest) (*pb.Logi
 
 	// Установка заголовков CORS
 	header := metadata.New(map[string]string{
-		"Set-Cookie":                       "token=" + token + "; Path=/; Domain=localhost; HttpOnly",
+		"Set-Cookie":                       "token=" + token + "; Path=/; HttpOnly",
 		"Access-Control-Allow-Origin":      "http://localhost:5173",
 		"Access-Control-Allow-Credentials": "true",
 		"Access-Control-Allow-Methods":     "GET, POST, PUT, POST, OPTIONS",
