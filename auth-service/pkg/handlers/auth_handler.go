@@ -76,13 +76,13 @@ func (h *AuthHandler) Login(ctx context.Context, req *pb.LoginRequest) (*pb.Logi
 
 	// Установка заголовков CORS
 	header := metadata.New(map[string]string{
-		"Set-Cookie":                       "auth_token=" + token + "; Path=/; HttpOnly",
-		"Access-Control-Allow-Origin":      "*",
+		"Set-Cookie":                       "token=" + token + "; Path=/; Domain=localhost; HttpOnly",
+		"Access-Control-Allow-Origin":      "http://localhost:5173",
 		"Access-Control-Allow-Credentials": "true",
 		"Access-Control-Allow-Methods":     "GET, POST, PUT, POST, OPTIONS",
 		"Access-Control-Allow-Headers":     "Content-Type, Authorization",
 	})
-	grpc.SetHeader(ctx, header)
+	grpc.SendHeader(ctx, header)
 
 	// Возвращение токена
 	return &pb.LoginResponse{
