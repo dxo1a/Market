@@ -9,9 +9,9 @@ type Profile struct {
 	UserID    uint   `gorm:"uniqueIndex"` // связь с users.id
 	FirstName string
 	LastName  string
-	Email     string `gorm:"uniqueIndex"`
-	Username  string `gorm:"uniqueIndex"`
-	Phone     string `gorm:"uniqueIndex"`
+	Email     string
+	Username  string
+	Phone     string
 	Address   string
 }
 

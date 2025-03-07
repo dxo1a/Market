@@ -57,42 +57,36 @@ func (h *AccountHandler) UpdateProfile(ctx context.Context, req *pb.UpdateProfil
 
     // проверка email
     if req.Email != "" {
-		var existing repository.Profile
-		if err := h.DB.
-			Where("email = ? AND user_id <> ?", req.Email, tokenClaims.UserID).
-			FirstOrCreate(&existing).Error; err != nil {
-			return nil, fmt.Errorf("ошибка при проверке email: %v", err)
-		}
-		if existing.ID != 0 {
-			return nil, errors.New("почта уже используется другим пользователем")
-		}
-	}
+        if err := h.DB.
+            Where("email = ? AND user_id <> ?", req.Email, tokenClaims.UserID).
+            First(&existing).Error; err == nil {
+            return nil, errors.New("почта уже используется другим пользователем")
+        } else if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+            return nil, err
+        }
+    }
 
     // проверка phone
-	if req.Phone != "" {
-		var existing repository.Profile
-		if err := h.DB.
-			Where("phone = ? AND user_id <> ?", req.Phone, tokenClaims.UserID).
-			FirstOrCreate(&existing).Error; err != nil {
-			return nil, fmt.Errorf("ошибка при проверке номера телефона: %v", err)
-		}
-		if existing.ID != 0 {
-			return nil, errors.New("номер телефона уже используется другим пользователем")
-		}
-	}
+    if req.Phone != "" {
+        if err := h.DB.
+            Where("phone = ? AND user_id <> ?", req.Phone, tokenClaims.UserID).
+            First(&existing).Error; err == nil {
+            return nil, errors.New("номер телефона уже используется другим пользователем")
+        } else if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+            return nil, err
+        }
+    }
 
     // проверка username
     if req.Username != "" {
-		var existing repository.Profile
-		if err := h.DB.
-			Where("username = ? AND user_id <> ?", req.Username, tokenClaims.UserID).
-			FirstOrCreate(&existing).Error; err != nil {
-			return nil, fmt.Errorf("ошибка при проверке имени пользователя: %v", err)
-		}
-		if existing.ID != 0 {
-			return nil, errors.New("имя пользователя уже используется другим пользователем")
-		}
-	}
+        if err := h.DB.
+            Where("username = ? AND user_id <> ?", req.Username, tokenClaims.UserID).
+            First(&existing).Error; err == nil {
+            return nil, errors.New("имя пользователя уже используется другим пользователем")
+        } else if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+            return nil, err
+        }
+    }
 
     // получаем профиль текущего пользователя по userID, извлечённому из токена
     profile, err := repository.GetProfile(h.DB, tokenClaims.UserID)
