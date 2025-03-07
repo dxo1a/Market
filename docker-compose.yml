@@ -15,11 +15,32 @@ services:
     networks:
       - app-network
     volumes:
-      - ./auth-service:/app
       - ./.env:/app/.env
     develop:
       watch:
         - path: ./auth-service/
+          action: rebuild
+  
+  account-service:
+    build: ./account-service
+    env_file:
+      - .env
+    container_name: account-service
+    ports:
+      - "50052:50052"
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - JWT_SECRET=${JWT_SECRET}
+    networks:
+      - app-network
+    volumes:
+      - ./.env:/app/.env
+    develop:
+      watch:
+        - path: ./account-service/
           action: rebuild
     
   envoy:
@@ -29,6 +50,7 @@ services:
       - "8080:8080"
     depends_on:
       - auth-service
+      - account-service
     networks:
       - app-network
     develop:

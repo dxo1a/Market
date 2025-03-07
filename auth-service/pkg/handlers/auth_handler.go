@@ -69,7 +69,7 @@ func (h *AuthHandler) Login(ctx context.Context, req *pb.LoginRequest) (*pb.Logi
 	}
 
 	// Генерация JWT токена
-	token, err := service.GenerateJWT(user.Username) // Генерация по username (или можно использовать email)
+	token, err := service.GenerateJWT(user.ID, user.Username, user.Email)
 	if err != nil {
 		return nil, err
 	}

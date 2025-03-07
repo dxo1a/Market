@@ -6,11 +6,12 @@ import (
 
 type Profile struct {
 	ID        uint   `gorm:"primaryKey"`
-	UserID    uint   `gorm:"uniqueIndex"` // Идентификатор пользователя из auth-service
+	UserID    uint   `gorm:"uniqueIndex"` // связь с users.id
 	FirstName string
 	LastName  string
 	Email     string `gorm:"uniqueIndex"`
-	Phone     string
+	Username  string `gorm:"uniqueIndex"`
+	Phone     string `gorm:"uniqueIndex"`
 	Address   string
 }
 
