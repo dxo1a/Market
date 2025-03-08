@@ -1,103 +1,77 @@
 <script lang="ts" setup>
-import { ref, computed } from 'vue';
-import { useRouter } from 'vue-router';
+import { reactive, ref } from 'vue';
 import { registerUser } from '@/utils/auth-client';
+import FormCard from '../ui/Card/FormCard.vue';
+import { RegisterRequest } from '@/proto/auth';
+import Button from '../ui/Button.vue';
+import Input from '../ui/Input.vue';
+import IconAttention from '../icons/IconAttention.vue';
+import router from '@/router';
 
-const email = ref('');
-const username = ref('');
-const password = ref('');
-const confirmPassword = ref('');
-const router = useRouter();
-
-const passwordsMatch = computed(() => password.value === confirmPassword.value);
-const isFormValid = computed(() => email.value && username.value.length >= 5 && password.value && passwordsMatch.value);
-
-const handleRegister = async () => {
-  if (isFormValid.value) {
-    const token = await registerUser(email.value, username.value, password.value);
-    if (token) {
-      localStorage.setItem('authToken', token);
-      router.push({ name: 'home' });
-    }
-  } else {
-    console.error('Form is invalid!');
+function useUserForm() {
+  // TODO: universalize
+  const userData = reactive<RegisterRequest & { repeatPassword: string }>({
+    email: '',
+    username: '',
+    password: '',
+    repeatPassword: '',
+  });
+  const error = ref<string>('');
+  function validate() {
+    const errorStack = [];
+    if (userData.password != userData.repeatPassword) errorStack.push('Пароли не совпадают');
+    if (userData.password.length < 8) errorStack.push('Пароль должен содержать минимум 8 символов');
+    if (userData.username.length < 4) errorStack.push('Имя пользователя должно содержать минимум 4 символа');
+    return errorStack
   }
-};
+  async function onSubmit() {
+    if (validate().length > 0) {
+      error.value = validate().join(', ')
+      return
+    }
 
+    const data = await registerUser(userData);
+
+    if (data.status == 'error') {
+      error.value = data.data;
+      return;
+    } else error.value = ''
+    router.push('/login')
+  }
+  return {
+    userData,
+    onSubmit,
+    error
+  }
+}
+const { userData, onSubmit, error } = useUserForm()
 </script>
 <template>
-  <div class="form-container">
-    <div class="back-button-container">
-      <router-link to="/">
-        <button class="back-button">Назад</button>
-      </router-link>
-    </div>
-
-    <h1>Регистрация</h1>
-    <form @submit.prevent="handleRegister">
-      <input v-model="email" type="email" placeholder="Email" required />
-      <input v-model="username" type="text" placeholder="Имя пользователя" required />
-      <input v-model="password" type="password" placeholder="Пароль" required />
-      <input v-model="confirmPassword" type="password" placeholder="Подтвердите пароль" required />
-      <button type="submit" :disabled="!isFormValid">Зарегистрироваться</button>
-    </form>
-  </div>
+  <FormCard @submit="onSubmit">
+    <template #header>
+      <h1 class="text-xl leading-xl font-medium">Регистрация</h1>
+    </template>
+    <template #default>
+      <Input v-model="userData.username" name="username" type="text" autocomplete="username"
+        placeholder="Имя пользователя" />
+      <Input v-model="userData.email" name="email" type="email" autocomplete="email" placeholder="Email" />
+      <Input v-model="userData.password" name="password" type="password" autocomplete="password" placeholder="Пароль" />
+      <Input v-model="userData.repeatPassword" name="repeatPassword" type="password" placeholder="Повторите пароль" />
+      <div v-if="error" class="text-sm text-destructive items-center gap-2 flex justify-center">
+        <IconAttention class="text-destructive flex-shrink-0" />
+        <span class="first-letter:uppercase">{{ error }}</span>
+      </div>
+      <Button class="w-fit m-auto" :variant="'primary'" type="submit">Зарегистрироваться</button>
+    </template>
+    <template #footer>
+      <div class="relative  py-5">
+        <hr class="border-border" />
+        <span class="text-primary text-md absolute inset-0 m-auto px-4 block bg-card w-fit h-fit">или</span>
+      </div>
+      <Button to="/login" class="w-fit m-auto" :variant="'outlined'">
+        Войти
+      </Button>
+    </template>
+  </FormCard>
 </template>
-<style scoped>
-.form-container {
-  text-align: center;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-}
-
-input {
-  width: 100%;
-  padding: 10px;
-  margin: 5px 0;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-button {
-  padding: 10px 20px;
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #45a049;
-}
-
-button:disabled {
-  background-color: #4caf4f46;
-  color: #ffffff34;
-  cursor: default;
-}
-
-.back-button-container {
-  text-align: left;
-  width: 100%;
-  margin-bottom: 20px;
-}
-
-.back-button {
-  padding: 8px 16px;
-  background-color: #f0f0f0;
-  color: #333;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.back-button:hover {
-  background-color: #e0e0e0;
-}
-</style>
+<style scoped></style>
