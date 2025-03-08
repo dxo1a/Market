@@ -10,9 +10,8 @@ import IconAttention from '../icons/IconAttention.vue'
 
 function useUserForm() {
   const userData = reactive<LoginRequest>({
-    email: '',
     password: '',
-    username: ''
+    emailOrUsername: '',
   });
   const error = ref<string>('');
 
@@ -37,14 +36,14 @@ const { onSubmit, error, userData } = useUserForm()
       <h1 class="text-xl leading-xl font-medium">Вход</h1>
     </template>
     <template #default>
-      <Input v-model="userData.username" name="login" type="text" autocomplete="email username"
+      <Input v-model="userData.emailOrUsername" name="login" type="text" autocomplete="email username"
         placeholder="Email или имя пользователя" />
       <Input v-model="userData.password" name="password" type="password" autocomplete="password" placeholder="Пароль" />
       <div v-if="error" class="text-sm text-destructive items-center gap-2 flex justify-center">
         <IconAttention class="text-destructive " />
         <span class="capitalize">{{ error }}</span>
       </div>
-      <Button class=" w-fit m-auto" type="submit">Войти</button>
+      <Button class="w-fit m-auto" :variant="'primary'" type="submit">Войти</button>
     </template>
     <template #footer>
       <div class="relative  py-5">

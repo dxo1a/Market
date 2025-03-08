@@ -16,17 +16,12 @@ const props = withDefaults(
 const { variant } = toRefs(props)
 
 const variantClass = computed(() => {
-  switch (variant.value) {
-    case "primary":
-    case "secondary":
-      return `bg-${variant.value} border-primary border-solid hover:bg-${variant.value}/90 text-${variant.value}-foreground`
-    case "outlined":
-      return 'bg-transparent border-primary border border-solid hover:bg-primary hover:text-primary-foreground'
-      break;
-    default:
-      return '';
-      break;
+  const variants = {
+    primary: 'bg-primary border-primary border-solid hover:bg-primary/90 text-primary-foreground',
+    secondary: 'bg-secondary border-primary border-solid hover:bg-secondary/90 text-secondary-foreground',
+    outlined: 'bg-transparent border-primary border border-solid hover:bg-primary hover:text-primary-foreground'
   }
+  return variants[variant.value]
 })
 
 </script>
