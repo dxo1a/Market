@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 import { RouterView, useRoute } from 'vue-router';
 import EntryLayout from './components/layouts/EntryLayout.vue';
 
@@ -12,6 +12,13 @@ const layout = computed(() => {
   }
 })
 
+watch(() => route.meta.requiresAuth, (value) => {
+  if (value) {
+    console.log('required auth')
+  } else {
+    console.log('no required auth')
+  }
+})
 </script>
 <template>
   <component :is="layout">
