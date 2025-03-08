@@ -5,9 +5,9 @@ go 1.23.6
 require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	golang.org/x/crypto v0.35.0
-	google.golang.org/grpc v1.70.0
+	google.golang.org/grpc v1.71.0
 	google.golang.org/protobuf v1.36.5
-	gorm.io/gorm v1.25.10
+	gorm.io/gorm v1.25.12
 )
 
 require (
