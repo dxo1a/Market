@@ -7,7 +7,7 @@ import Register from '@/components/views/Register.vue'
 const routes = [
   { path: '/login', name: 'login', component: Login, meta: { layout: 'entry' } },
   { path: '/register', name: 'register', component: Register, meta: { layout: 'entry' } },
-  { path: '/', name: 'home', component: Home, meta: { layout: 'entry', requiresAuth: true } },
+  { path: '/', name: 'home', component: Home, meta: { layout: 'main', requiresAuth: true } },
 ]
 
 const router = createRouter({

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
-import { registerUser } from '@/utils/auth-client';
+import { registerUser } from '@/utils/grpc-get-data/auth-client';
 import FormCard from '../ui/Card/FormCard.vue';
 import { RegisterRequest } from '@/proto/auth';
 import Button from '../ui/Button.vue';
@@ -36,7 +36,7 @@ function useUserForm() {
       error.value = data.data;
       return;
     } else error.value = ''
-    router.push('/login')
+    router.push('/login?loginAfterRegister');
   }
   return {
     userData,

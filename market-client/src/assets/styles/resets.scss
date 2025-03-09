@@ -200,8 +200,7 @@
   path {
     fill: inherit;
   }
-}
-
-a:-webkit-any-link {
-  color: inherit;
+  a {
+    color: unset;
+  }
 }

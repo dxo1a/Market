@@ -11,7 +11,9 @@ export function decodeRpcError(err: RpcError): RpcError {
     stack: decodeURIComponent(err?.stack || ''),
   }
 }
-export function decodeToken(token: string) {
+export function decodeToken(
+  token: string,
+): { email: string; exp: number; username: string } | null {
   const tokenParts = token.split('.')
   if (tokenParts.length === 3) {
     const base64Url = tokenParts[1]
@@ -19,5 +21,5 @@ export function decodeToken(token: string) {
     const decodedPayload = atob(base64)
     return JSON.parse(decodedPayload)
   }
-  return {}
+  return null
 }

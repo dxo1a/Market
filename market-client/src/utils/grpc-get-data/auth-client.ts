@@ -1,7 +1,7 @@
 import { AuthServiceClient } from '@/proto/auth.client'
-import grpcTransport from './grpc-transport'
+import grpcTransport from '../grpc-transport'
 import { type LoginRequest, type LogoutRequest, type RegisterRequest } from '@/proto/auth'
-import { grpcFetch } from './grpc-fetch'
+import { grpcFetch } from '../grpc-fetch'
 
 const client = new AuthServiceClient(grpcTransport)
 
