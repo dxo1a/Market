@@ -3,8 +3,8 @@ package handlers
 import (
 	"context"
 
-	"market/auth-service/pkg/service"
 	"market/auth-service/pkg/repository"
+	"market/auth-service/pkg/service"
 	pb "market/auth-service/proto"
 
 	"golang.org/x/crypto/bcrypt"
@@ -16,7 +16,7 @@ import (
 )
 
 type AuthHandler struct {
-	pb.UnimplementedAuthServiceServer
+	pb.UnimplementedMarketServiceServer
 	DB *gorm.DB
 }
 

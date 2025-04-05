@@ -15,7 +15,7 @@ import (
 
 type AccountHandler struct {
 	DB *gorm.DB
-	pb.UnimplementedAccountServiceServer
+	pb.UnimplementedMarketServiceServer
 }
 
 func Migrate(db *gorm.DB) {

@@ -1,7 +1,7 @@
 import grpcTransport from '../grpc-transport'
 import { grpcFetch } from '../grpc-fetch'
-import { AccountServiceClient } from '@/proto/account.client'
+import { MarketServiceClient } from '@/proto/market.client'
 
-const client = new AccountServiceClient(grpcTransport)
+const client = new MarketServiceClient(grpcTransport)
 
 export const getProfileData = async () => await grpcFetch({}, () => client.getProfile({}))

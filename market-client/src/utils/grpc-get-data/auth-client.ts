@@ -1,9 +1,9 @@
-import { AuthServiceClient } from '@/proto/auth.client'
+import { MarketServiceClient } from '@/proto/market.client'
 import grpcTransport from '../grpc-transport'
-import { type LoginRequest, type LogoutRequest, type RegisterRequest } from '@/proto/auth'
+import { type LoginRequest, type LogoutRequest, type RegisterRequest } from '@/proto/market'
 import { grpcFetch } from '../grpc-fetch'
 
-const client = new AuthServiceClient(grpcTransport)
+const client = new MarketServiceClient(grpcTransport)
 
 export const loginUser = async (data: LoginRequest) =>
   await grpcFetch(data, client.login.bind(client))

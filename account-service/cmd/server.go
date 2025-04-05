@@ -39,7 +39,7 @@ func main() {
 	handler := &handlers.AccountHandler{DB: db}
 
 	grpcServer := grpc.NewServer()
-	pb.RegisterAccountServiceServer(grpcServer, handler)
+	pb.RegisterMarketServiceServer(grpcServer, handler)
 	reflection.Register(grpcServer)
 
 	fmt.Println("gRPC (account-service) успешно запущен. Порт: 50052")

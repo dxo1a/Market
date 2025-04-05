@@ -19,7 +19,7 @@ import (
 var db *gorm.DB
 
 type AuthServiceServer struct {
-	pb.UnimplementedAuthServiceServer
+	pb.UnimplementedMarketServiceServer
 }
 
 func init() {
@@ -42,7 +42,7 @@ func main() {
 	handler := &handlers.AuthHandler{DB: db}
 
 	grpcServer := grpc.NewServer()
-	pb.RegisterAuthServiceServer(grpcServer, handler)
+	pb.RegisterMarketServiceServer(grpcServer, handler)
 	reflection.Register(grpcServer)
 
 	fmt.Println("gRPC (auth-service) успешно запущен. Порт: 50051")
